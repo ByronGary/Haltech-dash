@@ -84,6 +84,25 @@ is not multitasking anything heavy while the dash is up. The bottlenecks, in ord
 Not a concern: Android 10 predates the API 34 USB permission bug, and the 1024x600 panel is a light pixel
 load.
 
+### CarPlay / Android Auto alongside RealDash
+
+- RealDash cannot run *inside* CarPlay or Android Auto. Both projection APIs only admit media, messaging
+  and navigation app types; the RealDash developer has said its game-engine renderer will never be allowed.
+  So on the ATOTO they are two separate full-screen apps and you switch between them.
+- No USB port conflict. The CAN adapter lives on the storage port; the phone uses wireless CarPlay/AA on
+  this model, or the dedicated phone-link port if wired. Never put the CAN adapter on the phone-link port.
+- Wireless CarPlay/AA uses the head unit's Wi-Fi as a peer-to-peer link. That is one more reason to use a
+  USB CAN adapter rather than a Wi-Fi one (MeatPi), and it means the bench simulator over Wi-Fi may fight
+  with wireless CarPlay. Bench test with CarPlay disconnected.
+- When CarPlay is in front, RealDash is in the background. It keeps the USB connection and keeps logging as
+  long as Android does not kill it; exclude RealDash from battery optimisation and keep the dashboard light
+  so memory pressure stays low. You will not see RealDash warnings while CarPlay is in front; there is no
+  overlay mode.
+- ATOTO's split screen is for its own apps. CarPlay/AA projection will not share the screen with RealDash.
+- Practical layout: RealDash as the auto-start home screen with a big button that launches the CarPlay app,
+  and the head unit's hardware "home" key mapped back to RealDash. Navigation and gauges at the same time
+  needs a second display or the phone on a mount.
+
 - Use a proper USB OTG adapter on the storage port. Some cheap OTG cables do not wire the ID pin and the
   head unit never enters host mode.
 - Android will prompt for USB permission for RealDash the first time; tick "always allow". RealDash fixed an
