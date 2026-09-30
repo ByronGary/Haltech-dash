@@ -37,6 +37,22 @@ DTM-4 CAN connector pinout (Haltech Elite):
 | 3 | CAN High | White |
 | 4 | CAN Low | Blue |
 
+### Connecting the Waveshare to the ECU
+
+The Waveshare USB-CAN-A does **not** plug straight into the Haltech CAN port. Its CAN side is a green
+2-way screw terminal (CAN_H, CAN_L); the Haltech side is a Deutsch DTM-4. You need a pigtail:
+
+| Option | How |
+|--------|-----|
+| Cheapest | Deutsch DTM06-4S plug kit (4-way socket housing, 2 DTM 20-16 AWG sockets, wedge lock, plus 2 sealing plugs for the unused cavities). Crimp a twisted pair to cavities 3 and 4, screw the other end into the Waveshare. |
+| Fastest | Haltech HT-130021 DTM-4 to DTM-4 cable (150 mm). Cut one plug off, strip the white and blue wires, screw into CAN_H and CAN_L. Tape off red and black; the Waveshare is USB powered. |
+| If you have other CAN devices | Haltech DTM-4 CAN hub. The Waveshare pigtail becomes one branch; the hub cable to the ECU is unchanged. |
+
+Wire map: DTM-4 pin 3 (white) -> Waveshare CAN_H, pin 4 (blue) -> CAN_L. Pins 1 (12 V) and 2 (GND) are
+left unconnected. The Waveshare has a 120 ohm termination switch next to the terminal block; set it ON if the
+adapter is the far end of the bus and there is no other terminator there, OFF if it hangs off a hub that
+is already terminated.
+
 - Twisted pair for CAN H / CAN L. Keep the stub to the adapter short.
 - Two 120 ohm terminators, one at each physical end of the bus. The Elite has one internally at the ECU end
   in most configurations; check the Haltech CAN wiring guide for the Elite 2500 and add the second at the
