@@ -9,7 +9,10 @@ Ordered by how often each one turns out to be the cause on the RealDash forum.
 2. CAN speed in RealDash not 1000 kbps, or frame type not Standard.
 3. Serial baud not matching the adapter. Seeed/Waveshare default to 2000000; RealDash recommends 1228800 and
    the adapter must be set to the same value with its Windows tool. The LED blink pattern on the Seeed
-   indicates the current baud.
+   indicates the current baud. One Elite 2500 owner "changed" the Waveshare to a lower rate, the change never
+   stuck, and the fix was simply setting RealDash to 2000000 to match what the dongle was actually doing. If
+   in doubt, leave the dongle at factory 2000000 and set RealDash to 2000000; drop both to 1228800 only if
+   values stutter.
 4. CAN H / CAN L swapped, or no termination. Check for ~60 ohm across H and L with power off.
 5. Waveshare only: set **Protocol = variable length** and **only send once** in the Waveshare config tool.
 

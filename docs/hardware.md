@@ -56,7 +56,33 @@ Haltech guide: https://support.haltech.com/portal/en/kb/articles/elite-1500-2500
 2. **Vehicle CAN System** (if used): choose which connector it lives on so it does not collide.
 3. CAN broadcast protocol: **Haltech V2** (the default on Elite). Speed is fixed at 1 Mbit/s.
 
-## Head unit notes (ATOTO S8 Gen2 Standard)
+## Head unit notes (ATOTO S8 Gen2 Standard, S8G2A74SD)
+
+| Spec | Value |
+|------|-------|
+| SoC | UNISOC 7862, 8x Cortex-A55 up to 1.8 GHz, Mali-G52 MP2, 12 nm |
+| RAM / storage | 3 GB / 32 GB |
+| OS | ATOTO AICE UI 11 on Android 10 |
+| Screen | 7 in, 1024x600 IPS, 600 nits |
+
+### Is it fast enough?
+
+Yes for this job. RealDash is a native OpenGL app that runs on 2 GB tablets; 3 GB is fine and the head unit
+is not multitasking anything heavy while the dash is up. The bottlenecks, in order, are:
+
+1. **USB serial throughput, not RAM or GPU.** The adapter turns every CAN frame into ~20 serial bytes. The
+   full Haltech V2 broadcast is roughly 600 frames/s (about 2000 values/s), which at 1228800 baud uses
+   ~10% of the link. Busy buses (extra Haltech CAN devices, a second ECU protocol enabled) push the adapter
+   into buffering and you get the 1-2 s "rubber band" lag reported on the RealDash forum. Mitigation is on
+   the ECU side: in NSP turn off broadcast groups you do not display, keep only one broadcast protocol on.
+2. **Gauge rendering cost.** The Mali-G52 MP2 is a budget GPU. Avoid full-screen blur, glow, drop shadows
+   and large animated backgrounds. Plain needles, bars and text run at 60 fps; effects-heavy dashboards
+   from the RealDash store can drop to 20-30 fps on this class of SoC.
+3. **The AICE launcher.** ATOTO's skin keeps its own services resident. Disable ATOTO's boot animation and
+   any radio/EQ widgets you do not use, and set RealDash as the auto-start app.
+
+Not a concern: Android 10 predates the API 34 USB permission bug, and the 1024x600 panel is a light pixel
+load.
 
 - Use a proper USB OTG adapter on the storage port. Some cheap OTG cables do not wire the ID pin and the
   head unit never enters host mode.
