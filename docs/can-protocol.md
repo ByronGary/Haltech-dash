@@ -100,3 +100,25 @@ intend to drive ECU inputs from the screen, and never enable a second IO Box A o
   stock RealDash gear gauges work.
 - Map EGTs (0x373) if the car has them.
 - `timeout` on the 0x360 frame so gauges drop to zero when the ECU goes off.
+
+## Haltech NSP log channels to CAN
+
+NSP data logs use their own channel IDs, which are not CAN IDs. Log values are raw, with the same scaling as the
+broadcast (temperatures 0.1 K, pressures 0.1 kPa, lambda x1000). Logs also use -2147483637 as a "no data" marker
+for wideband channels that are not reporting; that is a log artifact, not something sent on CAN.
+
+| Wanted | NSP log channel (ID) | CAN frame | RealDash input |
+|--------|----------------------|-----------|----------------|
+| Coolant temp | Coolant Temperature (229) | 0x3E0 0-1 | 14 |
+| Intake air temp | Intake Air Temperature (228) | 0x3E0 2-3 | 27 |
+| MAP / boost | Manifold Pressure (224) | 0x360 2-3 | 31 (absolute kPa, subtract 101.3 for gauge) |
+| Oil pressure | Oil Pressure (236) | 0x361 2-3 | 151 |
+| RPM | RPM (384) | 0x360 0-1 | 37 |
+| Speed | Vehicle Speed Drive Train Sensor (463) | 0x370 0-1 | 81 |
+| Ethanol % | Fuel Composition (285), Flex Fuel Sensor (1238) | 0x3E1 4-5 | custom "Haltech: Fuel Composition" |
+| Wideband / AFR | Wideband O2 1, 2 (230, 231) | 0x368 (lambda 1, 2), 0x470 | 254, 255 (lambda); custom "Haltech: AFR 1/2 (14.7)" |
+| Throttle | Throttle Position (225) | 0x360 4-5 | 42 |
+| Target boost | Boost Control Target Pressure (181) | 0x372 4-5 | 270 |
+
+Target boost reads 0 in all logs so far, so the ECU is not producing a target. Set up boost control in NSP
+before expecting 0x372 to carry a value.

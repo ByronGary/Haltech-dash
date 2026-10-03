@@ -70,6 +70,9 @@
       <value targetId="255" offset="2" length="2" conversion="V*0.001"></value> <!-- lambda 2-->
       <value name="Haltech: Lambda 3" offset="4" length="2" conversion="V*0.001"></value>
       <value name="Haltech: Lambda 4" offset="6" length="2" conversion="V*0.001"></value>
+      <!-- AFR for custom gauges. Stoich differs with ethanol content, so these use 14.7 (gasoline); scale in the gauge for E85 (9.76) -->
+      <value name="Haltech: AFR 1 (14.7)" offset="0" length="2" conversion="V*0.0147"></value>
+      <value name="Haltech: AFR 2 (14.7)" offset="2" length="2" conversion="V*0.0147"></value>
     </frame>
 
     <frame id="0x369" endianess="big">
